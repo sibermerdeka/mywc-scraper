@@ -1,0 +1,4 @@
+polars
+request
+bs4
+alive-progress
