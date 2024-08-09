@@ -11,7 +11,7 @@ def toilet_info(URL: str):
 
     URL format: https://mywc.kpkt.gov.my/toilet/[location]
     """
-    page = requests.get(URL)
+    page = requests.get(URL, timeout=60)
 
     soup = BeautifulSoup(page.content, "html.parser")
 
@@ -43,7 +43,7 @@ def toilet_info(URL: str):
         "tags": ", ".join(facilities),
         "lat": location[0][0].strip(' '),
         "lng": location[0][1].strip(' '),
-        "rating": rating[0][0]
+        "rating": rating[-1][0]
     }
 
 def get_toilet_list(start_page: int = 0, n_pages: int = 515) -> list:
@@ -57,7 +57,7 @@ def get_toilet_list(start_page: int = 0, n_pages: int = 515) -> list:
     for page_num in range(n_pages):
          # Access the nth MyWC page
         url = "https://mywc.kpkt.gov.my/?keyword=&state_id=&page={}#toilet-search-list".format(page_num)
-        reqs = requests.get(url)
+        reqs = requests.get(url, timeout=60)
         soup = BeautifulSoup(reqs.text, 'html.parser')
 
         # Find all URLs in that page, then filter to just toilet URLs
@@ -88,7 +88,7 @@ def get_toilet_info(start_page: int = 0, n_pages: int = 515) -> dict:
         for page_num in range(start_page, start_page + n_pages):
             # Access the nth MyWC page
             url = "https://mywc.kpkt.gov.my/?keyword=&state_id=&page={}#toilet-search-list".format(page_num)
-            reqs = requests.get(url)
+            reqs = requests.get(url, timeout=60)
             soup = BeautifulSoup(reqs.text, 'html.parser')
 
             # Find all URLs in that page, then filter to just toilet URLs
